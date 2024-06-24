@@ -43,6 +43,36 @@ function App() {
     fetchPlayerStats();
   };
 
+  const columnOrder = [
+    // "PLAYER_ID",
+    "SEASON_ID",
+    // "LEAGUE_ID",
+    // "TEAM_ID",
+    "TEAM_ABBREVIATION",
+    "PLAYER_AGE",
+    "GP",
+    "GS",
+    "MIN",
+    "PTS",
+    "REB",
+    "AST",
+    "STL",
+    "BLK",
+    "TOV",
+    "PF",
+    "OREB",
+    "DREB",
+    "FGM",
+    "FGA",
+    "FG_PCT",
+    "FG3M",
+    "FG3A",
+    "FG3_PCT",
+    "FTM",
+    "FTA",
+    "FT_PCT",
+  ];
+
   return (
     <div>
       <h1>Player Stats</h1>
@@ -74,7 +104,7 @@ function App() {
           <table>
             <thead>
               <tr>
-                {Object.keys(careerStats[0]).map((key) => (
+                {columnOrder.map((key) => (
                   <th key={key}>{key}</th>
                 ))}
               </tr>
@@ -82,8 +112,8 @@ function App() {
             <tbody>
               {careerStats.map((season, index) => (
                 <tr key={index}>
-                  {Object.values(season).map((value, idx) => (
-                    <td key={idx}>{value}</td>
+                  {columnOrder.map((key) => (
+                    <td key={key}>{season[key]}</td>
                   ))}
                 </tr>
               ))}
