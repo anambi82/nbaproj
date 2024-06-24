@@ -4,22 +4,31 @@ function App() {
   const [playerName, setPlayerName] = useState("");
   const [playerData, setPlayerData] = useState({});
   const [careerStats, setCareerStats] = useState([]);
+  const [error, setError] = useState("");
 
   const fetchPlayerStats = () => {
     fetch(`/playerstats?player_name=${playerName}`)
       .then((res) => res.json())
       .then((json) => {
         console.log(json);
-        setPlayerData({
-          player: json.player,
-          ppg: json.ppg,
-          rpg: json.rpg,
-          apg: json.apg,
-        });
-        setCareerStats(json.career_stats);
+        if (json.error) {
+          setError(json.error);
+          setPlayerData({});
+          setCareerStats([]);
+        } else {
+          setError("");
+          setPlayerData({
+            player: json.player,
+            ppg: json.ppg,
+            rpg: json.rpg,
+            apg: json.apg,
+          });
+          setCareerStats(json.career_stats);
+        }
       })
       .catch((error) => {
         console.error("Error fetching player stats:", error);
+        setError("An error occurred while fetching player stats.");
         setPlayerData({});
         setCareerStats([]);
       });
@@ -33,37 +42,6 @@ function App() {
     e.preventDefault();
     fetchPlayerStats();
   };
-
-  // Define the order of the columns
-  const columnOrder = [
-    // "PLAYER_ID",
-    "SEASON_ID",
-    // "LEAGUE_ID",
-    // "TEAM_ID",
-    "TEAM_ABBREVIATION",
-    "PLAYER_AGE",
-    "GP",
-    "GS",
-    "MIN",
-    "PTS",
-    "REB",
-    "AST",
-    "STL",
-    "BLK",
-    "TOV",
-    "PF",
-    "OREB",
-    "DREB",
-    "FGM",
-    "FGA",
-    "FG_PCT",
-    "FG3M",
-    "FG3A",
-    "FG3_PCT",
-    "FTM",
-    "FTA",
-    "FT_PCT",
-  ];
 
   return (
     <div>
@@ -79,26 +57,24 @@ function App() {
         <button type="submit">Get Stats</button>
       </form>
 
-      {playerData.player ? (
+      {error && <div>{error}</div>}
+
+      {playerData.player && (
         <div>
           <h3>{playerData.player}</h3>
           <h3>{playerData.ppg} PPG</h3>
           <h3>{playerData.rpg} RPG</h3>
           <h3>{playerData.apg} APG</h3>
         </div>
-      ) : (
-        <div>
-          <h3>No player found</h3>
-        </div>
       )}
 
-      {careerStats.length > 0 && (
+      {playerData.player && careerStats.length > 0 && (
         <div>
           <h2>Career Stats</h2>
           <table>
             <thead>
               <tr>
-                {columnOrder.map((key) => (
+                {Object.keys(careerStats[0]).map((key) => (
                   <th key={key}>{key}</th>
                 ))}
               </tr>
@@ -106,8 +82,8 @@ function App() {
             <tbody>
               {careerStats.map((season, index) => (
                 <tr key={index}>
-                  {columnOrder.map((key) => (
-                    <td key={key}>{season[key]}</td>
+                  {Object.values(season).map((value, idx) => (
+                    <td key={idx}>{value}</td>
                   ))}
                 </tr>
               ))}
