@@ -21,9 +21,30 @@ def get_career_ppg(player_id):
     totalpoints = career_stats['PTS'].sum()
     totalgames = career_stats['GP'].sum()
     if totalgames > 0:
-        return totalpoints / totalgames
+        ppg = totalpoints / totalgames
+        ppg = round(ppg, 1)
+        return ppg
     
-
+#get the total rebounds per game for the player
+def get_career_rpg(player_id):
+    career_stats = get_career_stats(player_id)
+    totalRebounds = career_stats['REB'].sum()
+    totalgames = career_stats['GP'].sum()
+    if totalgames > 0:
+        rbg = totalRebounds / totalgames
+        rbg = round(rbg, 1)
+        return rbg
+    
+#get the total assists per game for the player 
+def get_career_apg(player_id):
+    career_stats = get_career_stats(player_id)
+    totalAssists = career_stats['AST'].sum()
+    totalgames = career_stats['GP'].sum()
+    if totalgames > 0:
+        apg = totalAssists / totalgames
+        apg = round(apg, 1)
+        return apg
+    
 # #main starts here
 # player_name = "Luka Doncic"
 # player_id = get_player_id(player_name)
