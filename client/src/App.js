@@ -91,7 +91,8 @@ function App() {
 
       {playerData.player && (
         <div>
-          <h3>{playerData.player}</h3>
+          <h1>{playerData.player}</h1>
+          <h2>Career Averages</h2>
           <h3>{playerData.ppg} PPG</h3>
           <h3>{playerData.rpg} RPG</h3>
           <h3>{playerData.apg} APG</h3>
