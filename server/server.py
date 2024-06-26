@@ -54,8 +54,8 @@ def generate_plot(player_name):
             made_shots = shotchart_df[shotchart_df['SHOT_MADE_FLAG'] == 1]
             missed_shots = shotchart_df[shotchart_df['SHOT_MADE_FLAG'] == 0]
 
-            ax.scatter(made_shots.LOC_X, made_shots.LOC_Y, c='blue', s=30, alpha=0.6, edgecolors='k', label='Made Shots')
-            ax.scatter(missed_shots.LOC_X, missed_shots.LOC_Y, c='red', s=30, alpha=0.6, marker='x', label='Missed Shots')
+            ax.scatter(made_shots.LOC_X, made_shots.LOC_Y, c='blue', s=20, alpha=0.6, edgecolors='k', label='Made Shots')
+            ax.scatter(missed_shots.LOC_X, missed_shots.LOC_Y, c='red', s=20, alpha=0.6, marker='x', label='Missed Shots')
             
             ax.set_xlim(-250, 250)
             ax.set_ylim(-50, 470)

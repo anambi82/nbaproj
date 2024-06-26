@@ -130,7 +130,7 @@ function App() {
       {/* Display Shot Chart */}
       {imageUrl ? (
         <div>
-          <h2>{playerName} Shot Chart</h2>
+          <h2>{playerData.player} Shot Chart</h2>
           <img
             src={imageUrl}
             alt={`${playerName} Shot Chart`}
