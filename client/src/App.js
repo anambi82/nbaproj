@@ -1,22 +1,23 @@
-import React, { useState } from "react";
-//commenting to test repo
+import React, { useState, useEffect } from 'react';
+
 function App() {
-  const [playerName, setPlayerName] = useState("");
+  const [playerName, setPlayerName] = useState('');
   const [playerData, setPlayerData] = useState({});
   const [careerStats, setCareerStats] = useState([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   const fetchPlayerStats = () => {
     fetch(`/playerstats?player_name=${playerName}`)
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
+      .then(res => res.json())
+      .then(json => {
         if (json.error) {
           setError(json.error);
           setPlayerData({});
           setCareerStats([]);
+          setImageUrl('');
         } else {
-          setError("");
+          setError('');
           setPlayerData({
             player: json.player,
             ppg: json.ppg,
@@ -24,21 +25,24 @@ function App() {
             apg: json.apg,
           });
           setCareerStats(json.career_stats);
+          // Set the player name for the shot chart component
+          setImageUrl(`/plot?player_name=${encodeURIComponent(playerName)}`);
         }
       })
-      .catch((error) => {
-        console.error("Error fetching player stats:", error);
-        setError("An error occurred while fetching player stats.");
+      .catch(error => {
+        console.error('Error fetching player stats:', error);
+        setError('An error occurred while fetching player stats.');
         setPlayerData({});
         setCareerStats([]);
+        setImageUrl('');
       });
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     setPlayerName(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     fetchPlayerStats();
   };
@@ -105,7 +109,7 @@ function App() {
           <table>
             <thead>
               <tr>
-                {columnOrder.map((key) => (
+                {columnOrder.map(key => (
                   <th key={key}>{key}</th>
                 ))}
               </tr>
@@ -113,7 +117,7 @@ function App() {
             <tbody>
               {careerStats.map((season, index) => (
                 <tr key={index}>
-                  {columnOrder.map((key) => (
+                  {columnOrder.map(key => (
                     <td key={key}>{season[key]}</td>
                   ))}
                 </tr>
@@ -121,6 +125,20 @@ function App() {
             </tbody>
           </table>
         </div>
+      )}
+
+      {/* Display Shot Chart */}
+      {imageUrl ? (
+        <div>
+          <h2>{playerName} Shot Chart</h2>
+          <img
+            src={imageUrl}
+            alt={`${playerName} Shot Chart`}
+            style={{ width: '100%', height: 'auto', maxWidth: '1000px' }} // Adjust dimensions here
+          />
+        </div>
+      ) : (
+        <p>No shot chart available</p>
       )}
     </div>
   );
