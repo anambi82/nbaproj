@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 function PlayerStatsPage() {
   const { playerName } = useParams();
   const [playerData, setPlayerData] = useState({});
   const [careerStats, setCareerStats] = useState([]);
   const [error, setError] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
 
   const fetchPlayerStats = useCallback(() => {
     fetch(`/playerstats?player_name=${encodeURIComponent(playerName)}`)
@@ -35,22 +34,11 @@ function PlayerStatsPage() {
       });
   }, [playerName]);
 
-  const fetchShotChart = useCallback(() => {
-    fetch(`/plot?player_name=${encodeURIComponent(playerName)}`)
-      .then(response => response.blob())
-      .then(blob => {
-        const url = URL.createObjectURL(blob);
-        setImageUrl(url);
-      })
-      .catch(error => {
-        console.error('Error fetching the plot:', error);
-      });
-  }, [playerName]);
+  
 
   useEffect(() => {
     fetchPlayerStats();
-    fetchShotChart();
-  }, [fetchPlayerStats, fetchShotChart]);
+  }, [fetchPlayerStats]);
 
   const columnOrder = [
     "SEASON_ID",
@@ -108,7 +96,13 @@ function PlayerStatsPage() {
               {careerStats.map((season, index) => (
                 <tr key={index}>
                   {columnOrder.map((key) => (
-                    <td key={key}>{season[key]}</td>
+                    <td key={key}>
+                      {key === "SEASON_ID" ? (
+                        <Link to={`/player/${encodeURIComponent(playerName)}/season/${season[key]}`}>{season[key]}</Link>
+                      ) : (
+                        season[key]
+                      )}
+                    </td>
                   ))}
                 </tr>
               ))}
@@ -117,18 +111,6 @@ function PlayerStatsPage() {
         </div>
       )}
 
-      {imageUrl ? (
-        <div>
-          <h2>{playerName} Shot Chart</h2>
-          <img
-            src={imageUrl}
-            alt={`${playerName} Shot Chart`}
-            style={{ width: '100%', height: 'auto', maxWidth: '1000px' }}
-          />
-        </div>
-      ) : (
-        <p>No shot chart available</p>
-      )}
     </div>
   );
 }

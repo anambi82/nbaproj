@@ -27,7 +27,7 @@ def get_career_ppg(player_id):
     totalgames = career_stats['GP'].sum()
     if totalgames > 0:
         ppg = totalpoints / totalgames
-        ppg = round(ppg, 1)
+        ppg = round(ppg, 2)
         return ppg
     
 #get the total rebounds per game for the player
@@ -37,7 +37,7 @@ def get_career_rpg(player_id):
     totalgames = career_stats['GP'].sum()
     if totalgames > 0:
         rbg = totalRebounds / totalgames
-        rbg = round(rbg, 1)
+        rbg = round(rbg, 2)
         return rbg
     
 #get the total assists per game for the player 
@@ -47,10 +47,51 @@ def get_career_apg(player_id):
     totalgames = career_stats['GP'].sum()
     if totalgames > 0:
         apg = totalAssists / totalgames
-        apg = round(apg, 1)
+        apg = round(apg, 2)
         return apg
+    
+#get the season stats for the player
+def get_season_stats(player_id, season_id):
+    career = playercareerstats.PlayerCareerStats(player_id=player_id)
+    career_stats = career.get_data_frames()[0]
+    season_stats = career_stats[career_stats['SEASON_ID'] == season_id]
+    return season_stats
+
+#get the season ppg for the player
+def get_season_ppg(player_id, season_id):
+    career = playercareerstats.PlayerCareerStats(player_id=player_id)
+    career_stats = career.get_data_frames()[0]
+    season_stats = career_stats[career_stats['SEASON_ID'] == season_id]
+    if not season_stats.empty:
+        ppg = season_stats['PTS'].values[0] / season_stats['GP'].values[0]
+        ppg = round(ppg, 2)
+        return ppg
+    return
+
+#get the season rpg for the player
+def get_season_rpg(player_id, season_id):
+    career = playercareerstats.PlayerCareerStats(player_id=player_id)
+    career_stats = career.get_data_frames()[0]
+    season_stats = career_stats[career_stats['SEASON_ID'] == season_id]
+    if not season_stats.empty:
+        rpg = season_stats['REB'].values[0] / season_stats['GP'].values[0]
+        rpg = round(rpg, 2)
+        return rpg
+    return
+
+#get the season apg for the player
+def get_season_apg(player_id, season_id):
+    career = playercareerstats.PlayerCareerStats(player_id=player_id)
+    career_stats = career.get_data_frames()[0]
+    season_stats = career_stats[career_stats['SEASON_ID'] == season_id]
+    if not season_stats.empty:
+        apg = season_stats['AST'].values[0] / season_stats['GP'].values[0]
+        apg = round(apg, 2)
+        return apg
+    return
+
 # Get the player's shot chart
-def get_player_shot_chart(player_id, season_id='2022-23'):
+def get_player_shot_chart(player_id, season_id):
     shotchart = shotchartdetail.ShotChartDetail(player_id=player_id, team_id=0, season_type_all_star='Regular Season', season_nullable=season_id, context_measure_simple='FGA')
     shotchart_df = shotchart.get_data_frames()[0]
     return shotchart_df

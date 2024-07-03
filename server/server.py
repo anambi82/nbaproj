@@ -26,12 +26,35 @@ def playerstats():
         })
     else:
         return jsonify({"error": f"Player {player_name} not found."})
-    
+
+@app.route('/seasonstats')
+def seasonstats():
+    player_name = request.args.get('player_name')
+    season_id = request.args.get('season_id')
+    player_id = get_player_id(player_name)
+    if player_id and season_id:
+        season_stats = get_season_stats(player_id, season_id)
+        if not season_stats.empty:
+            season_ppg = get_season_ppg(player_id, season_id)
+            season_rpg = get_season_rpg(player_id, season_id)
+            season_apg = get_season_apg(player_id, season_id)
+            return jsonify({
+                "player": player_name,
+                "ppg": season_ppg,
+                "rpg": season_rpg,
+                "apg": season_apg,
+                "season_stats": season_stats.to_dict(orient='records')
+            })
+        else:
+            return jsonify({"error": f"No stats found for season {season_id} for player {player_name}."})
+    else:
+        return jsonify({"error": f"Player {player_name} not found or season {season_id} not found."})
 
 @app.route('/plot')
 def plot():
-    player_name = request.args.get('player_name', default='Luka Doncic')
-    fig = generate_plot(player_name=player_name)
+    player_name = request.args.get('player_name')
+    season_id = request.args.get('season_id')
+    fig = generate_plot(player_name=player_name, season_id=season_id)
     if fig:
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
@@ -40,15 +63,13 @@ def plot():
     else:
         return "No shot chart data available", 404
 
-def generate_plot(player_name):
+def generate_plot(player_name, season_id):
     player_id = get_player_id(player_name)
     if player_id:
-        shotchart_df = get_player_shot_chart(player_id)
+        shotchart_df = get_player_shot_chart(player_id, season_id)
         if not shotchart_df.empty:
             fig = Figure()
             ax = fig.add_subplot(111)
-            # court_img = mpimg.imread('basketball_court.png')
-            # ax.imshow(court_img, extent=[-250, 250, -47.5, 422.5], aspect='auto')
             draw_court(ax)
 
             made_shots = shotchart_df[shotchart_df['SHOT_MADE_FLAG'] == 1]
