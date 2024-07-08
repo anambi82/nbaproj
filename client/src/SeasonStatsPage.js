@@ -70,52 +70,64 @@ function SeasonStatsPage() {
     "FT_PCT",
   ];
 
+  // Mapping for displaying headers and data
+  const columnHeaderMapping = {
+    "SEASON_ID": "SEASON",
+    "TEAM_ABBREVIATION": "TEAM",
+    "PLAYER_AGE": "AGE",
+  };
 
   return (
-    <div>
-      <h1>{playerName} - {seasonId} Season Stats</h1>
-      {error && <div>{error}</div>}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-2xl font-bold mb-4">{playerName} - {seasonId} Season Stats</h1>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {seasonData.season_stats && Array.isArray(seasonData.season_stats) && (
-        <div>
-          <h2>Season Averages</h2>
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-4">Season Averages</h2>
           <h3>{seasonData.ppg} PPG</h3>
           <h3>{seasonData.rpg} RPG</h3>
           <h3>{seasonData.apg} APG</h3>
 
-          <h2>Season Stats</h2>
-          <table>
-            <thead>
-              <tr>
-                {columnOrder.map((key) => (
-                  <th key={key}>{key}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {seasonData.season_stats.map((stat, index) => (
-                <tr key={index}>
+          <h2 className="text-xl font-bold mt-6 mb-4">Season Stats</h2>
+          <div className="overflow-x-auto">
+            <table className="table-auto border-collapse border border-gray-200">
+              <thead>
+                <tr className="bg-gray-100">
                   {columnOrder.map((key) => (
-                    <td key={key}>{stat[key]}</td>
+                    <th key={key} className="border border-gray-300 p-2">
+                      {columnHeaderMapping[key] ? columnHeaderMapping[key] : key}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {seasonData.season_stats.map((stat, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
+                    {columnOrder.map((key) => (
+                      <td key={key} className="border border-gray-300 p-2">
+                        {key === "SEASON_ID" ? stat[key] : stat[key]}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {shotChartUrl ? (
-        <div>
-          <h2>{playerName} {seasonId} Shot Chart</h2>
+        <div className="text-center mt-8">
+          <h2 className="text-xl font-bold">{playerName} {seasonId} Shot Chart</h2>
           <img
             src={shotChartUrl}
             alt={`${playerName} ${seasonId} Shot Chart`}
-            style={{ width: '100%', height: 'auto', maxWidth: '1000px' }}
+            style={{ maxWidth: '100%', height: 'auto', maxHeight: '600px' }}
           />
         </div>
       ) : (
-        <p>No shot chart available</p>
+        <p className="text-center mt-8">No shot chart available</p>
       )}
     </div>
   );

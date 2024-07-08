@@ -34,14 +34,12 @@ function PlayerStatsPage() {
       });
   }, [playerName]);
 
-  
-
   useEffect(() => {
     fetchPlayerStats();
   }, [fetchPlayerStats]);
 
   const columnOrder = [
-    "SEASON_ID",
+    "SEASON",
     "TEAM_ABBREVIATION",
     "PLAYER_AGE",
     "GP",
@@ -67,14 +65,21 @@ function PlayerStatsPage() {
     "FT_PCT",
   ];
 
+  // Mapping for displaying headers and data
+  const columnHeaderMapping = {
+    "SEASON": "SEASON",
+    "TEAM_ABBREVIATION": "TEAM",
+    "PLAYER_AGE": "AGE",    
+  };
+
   return (
-    <div>
-      <h1>{playerName} Stats</h1>
-      {error && <div>{error}</div>}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-2xl font-bold mb-4">{playerName} Stats</h1>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {playerData.player && (
-        <div>
-          <h2>Career Averages</h2>
+        <div className="text-center mb-4">
+          <h2 className="text-xl font-bold">Career Averages</h2>
           <h3>{playerData.ppg} PPG</h3>
           <h3>{playerData.rpg} RPG</h3>
           <h3>{playerData.apg} APG</h3>
@@ -82,35 +87,38 @@ function PlayerStatsPage() {
       )}
 
       {playerData.player && careerStats.length > 0 && (
-        <div>
-          <h2>Career Stats</h2>
-          <table>
-            <thead>
-              <tr>
-                {columnOrder.map((key) => (
-                  <th key={key}>{key}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {careerStats.map((season, index) => (
-                <tr key={index}>
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-4">Career Stats</h2>
+          <div className="overflow-x-auto">
+            <table className="table-auto border-collapse border border-gray-200">
+              <thead>
+                <tr className="bg-gray-100">
                   {columnOrder.map((key) => (
-                    <td key={key}>
-                      {key === "SEASON_ID" ? (
-                        <Link to={`/player/${encodeURIComponent(playerName)}/season/${season[key]}`}>{season[key]}</Link>
-                      ) : (
-                        season[key]
-                      )}
-                    </td>
+                    <th key={key} className="border border-gray-300 p-2">
+                      {columnHeaderMapping[key] ? columnHeaderMapping[key] : key}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {careerStats.map((season, index) => (
+                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
+                    {columnOrder.map((key) => (
+                      <td key={key} className="border border-gray-300 p-2">
+                        {key === "SEASON" ? (
+                          <Link to={`/player/${encodeURIComponent(playerName)}/season/${season["SEASON_ID"]}`} className="text-blue-500 hover:underline">{season["SEASON_ID"]}</Link>
+                        ) : (
+                          key === "PLAYER_AGE" ? season[key] : season[key]
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
-
     </div>
   );
 }
