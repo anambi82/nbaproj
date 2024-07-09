@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 function SeasonStatsPage() {
   const { playerName, seasonId } = useParams();
   const [seasonData, setSeasonData] = useState({});
   const [shotChartUrl, setShotChartUrl] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const fetchSeasonStats = useCallback(() => {
     fetch(`/seasonstats?player_name=${encodeURIComponent(playerName)}&season_id=${seasonId}`)
@@ -70,7 +71,6 @@ function SeasonStatsPage() {
     "FT_PCT",
   ];
 
-  // Mapping for displaying headers and data
   const columnHeaderMapping = {
     "SEASON_ID": "SEASON",
     "TEAM_ABBREVIATION": "TEAM",
@@ -79,7 +79,15 @@ function SeasonStatsPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4">{playerName} - {seasonId} Season Stats</h1>
+      <div className="w-full">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="text-blue-500 hover:text-blue-700 mt-4 ml-4"
+        >
+          &larr; Back
+        </button>
+      </div>
+      <h1 className="text-2xl font-bold mb-4">{playerName}  {seasonId} Season Stats</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {seasonData.season_stats && Array.isArray(seasonData.season_stats) && (
@@ -106,7 +114,7 @@ function SeasonStatsPage() {
                   <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
                     {columnOrder.map((key) => (
                       <td key={key} className="border border-gray-300 p-2">
-                        {key === "SEASON_ID" ? stat[key] : stat[key]}
+                        {stat[key]}
                       </td>
                     ))}
                   </tr>
