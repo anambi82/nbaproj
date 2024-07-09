@@ -74,27 +74,27 @@ function PlayerStatsPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-2xl font-bold mb-4">{playerName} Stats</h1>
+      <h1 className="text-4xl font-bold mb-4">{playerName} Stats</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {playerData.player && (
         <div className="text-center mb-4">
-          <h2 className="text-xl font-bold">Career Averages</h2>
-          <h3>{playerData.ppg} PPG</h3>
-          <h3>{playerData.rpg} RPG</h3>
-          <h3>{playerData.apg} APG</h3>
+          <h2 className="text-3xl text-orange-500 font-bold">Career Averages</h2>
+          <h3 className='text-2xl'>{playerData.ppg} PPG</h3>
+          <h3 className='text-2xl'>{playerData.rpg} RPG</h3>
+          <h3 className='text-2xl'>{playerData.apg} APG</h3>
         </div>
       )}
 
       {playerData.player && careerStats.length > 0 && (
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-4">Career Stats</h2>
+          <h2 className="text-3xl text-orange-500  font-bold mb-4">Career Stats</h2>
           <div className="overflow-x-auto">
             <table className="table-auto border-collapse border border-gray-200">
               <thead>
                 <tr className="bg-gray-100">
                   {columnOrder.map((key) => (
-                    <th key={key} className="border border-gray-300 p-2">
+                    <th key={key} className="border border-gray-300 bg-orange-200 p-2">
                       {columnHeaderMapping[key] ? columnHeaderMapping[key] : key}
                     </th>
                   ))}

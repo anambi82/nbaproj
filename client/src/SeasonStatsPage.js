@@ -87,23 +87,23 @@ function SeasonStatsPage() {
           &larr; Back
         </button>
       </div>
-      <h1 className="text-2xl font-bold mb-4">{playerName}  {seasonId} Season Stats</h1>
+      <h1 className="text-4xl  font-bold mb-4">{playerName}  {seasonId} Season Stats</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
       {seasonData.season_stats && Array.isArray(seasonData.season_stats) && (
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-4">Season Averages</h2>
-          <h3>{seasonData.ppg} PPG</h3>
-          <h3>{seasonData.rpg} RPG</h3>
-          <h3>{seasonData.apg} APG</h3>
+          <h2 className="text-3xl text-orange-500 font-bold mb-4">Season Averages</h2>
+          <h3 className='text-2xl'>{seasonData.ppg} PPG</h3>
+          <h3 className='text-2xl'>{seasonData.rpg} RPG</h3>
+          <h3 className='text-2xl'>{seasonData.apg} APG</h3>
 
-          <h2 className="text-xl font-bold mt-6 mb-4">Season Stats</h2>
+          <h2 className="text-3xl text-orange-500 font-bold mt-6 mb-4">Season Stats</h2>
           <div className="overflow-x-auto">
             <table className="table-auto border-collapse border border-gray-200">
               <thead>
                 <tr className="bg-gray-100">
                   {columnOrder.map((key) => (
-                    <th key={key} className="border border-gray-300 p-2">
+                    <th key={key} className="border border-gray-300 bg-orange-200 p-2">
                       {columnHeaderMapping[key] ? columnHeaderMapping[key] : key}
                     </th>
                   ))}
@@ -127,7 +127,7 @@ function SeasonStatsPage() {
 
       {shotChartUrl ? (
         <div className="text-center mt-8">
-          <h2 className="text-xl font-bold">{playerName} {seasonId} Shot Chart</h2>
+          <h2 className="text-3xl text-orange-500 font-bold">{playerName} {seasonId} Shot Chart</h2>
           <img
             src={shotChartUrl}
             alt={`${playerName} ${seasonId} Shot Chart`}
