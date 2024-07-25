@@ -82,7 +82,7 @@ function SeasonStatsPage() {
       <div className="w-full">
         <button 
           onClick={() => navigate(-1)} 
-          className="text-blue-500 hover:text-blue-700 mt-4 ml-4"
+          className="text-orange-500 hover:text-orange-700 mt-4 ml-4"
         >
           &larr; Back
         </button>

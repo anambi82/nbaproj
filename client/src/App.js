@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import PlayerStatsPage from './PlayerStatsPage';
 import SeasonStatsPage from './SeasonStatsPage';
+import Prediction from './Prediction';
 import Header from './Header';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/player/:playerName" element={<PlayerStatsPage />} />
             <Route path="/player/:playerName/season/:seasonId" element={<SeasonStatsPage />} />
+            <Route path="/prediction" element={<Prediction />} />
           </Routes>
         </main>
       </div>
